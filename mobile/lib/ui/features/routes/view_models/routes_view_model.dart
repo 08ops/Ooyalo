@@ -45,7 +45,7 @@ class RoutesViewModel extends ChangeNotifier {
   }
 
   List<StopModel> getStopsForRoute(ShuttleRouteModel route) {
-    List<StopModel> routeStops = [];
+    final List<StopModel> routeStops = [];
     for (String stopId in route.stops) {
       final stop = stops.where((s) => s.id == stopId).firstOrNull;
       if (stop != null) {

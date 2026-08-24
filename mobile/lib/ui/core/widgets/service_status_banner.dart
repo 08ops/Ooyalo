@@ -5,10 +5,10 @@ class ServiceStatusBanner extends StatelessWidget {
   final String? message;
 
   const ServiceStatusBanner({
-    Key? key,
+    super.key,
     required this.status,
     this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

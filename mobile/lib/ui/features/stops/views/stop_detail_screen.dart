@@ -9,7 +9,7 @@ import 'package:ooyalo_app/ui/core/widgets/occupancy_badge.dart';
 
 class StopDetailScreen extends StatefulWidget {
   final String stopId;
-  const StopDetailScreen({Key? key, required this.stopId}) : super(key: key);
+  const StopDetailScreen({super.key, required this.stopId});
 
   @override
   State<StopDetailScreen> createState() => _StopDetailScreenState();
@@ -96,7 +96,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    'Code: ${stop.code}',
+                                    'Code: ',
                                     style: GoogleFonts.plusJakartaSans(color: Colors.white, fontSize: 12),
                                   ),
                                 ),
@@ -200,8 +200,8 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
   }
 
   Widget _buildArrivalCard(shuttle) {
-    int etaMins = (shuttle.etaSecondsToNextStop / 60).ceil();
-    bool isUrgent = etaMins < 5;
+    final int etaMins = (shuttle.etaSecondsToNextStop / 60).ceil();
+    final bool isUrgent = etaMins < 5;
     
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),

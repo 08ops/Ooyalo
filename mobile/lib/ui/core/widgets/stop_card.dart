@@ -1,41 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ooyalo_app/data/models/stop_model.dart';
 import 'package:ooyalo_app/ui/core/widgets/ooyalo_card.dart';
-import 'package:ooyalo_app/ui/core/widgets/eta_chip.dart';
 
 class StopCard extends StatelessWidget {
   final StopModel stop;
-  final int? distanceMeters;
-  final int? nextEtaSeconds;
-  final VoidCallback? onTap;
+  final double? distanceMeters;
+  final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
+  final VoidCallback? onTap;
 
   const StopCard({
-    Key? key,
+    super.key,
     required this.stop,
     this.distanceMeters,
-    this.nextEtaSeconds,
-    this.onTap,
+    this.isFavorite = false,
     this.onFavoriteToggle,
-  }) : super(key: key);
+    this.onTap,
+  });
 
-  String _formatDistance(int meters) {
-    if (meters < 1000) return '${meters}m';
-    return '${(meters / 1000).toStringAsFixed(1)} km';
+  String _formatDistance(double meters) {
+    if (meters < 1000) {
+      return '${meters.round()}m';
+    }
+    return '${(meters / 1000).toStringAsFixed(1)}km';
   }
 
-  String _estimateWalkTime(int meters) {
-    final minutes = (meters / 80).ceil(); // assuming ~80m per minute walk speed
+  String _estimateWalkTime(double meters) {
+    final minutes = (meters / 80).ceil();
     return '$minutes min walk';
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return OoyaloCard(
-      onTap: onTap,
-      padding: const EdgeInsets.all(16.0),
+      onTap: onTap ?? () => context.push('/stops/'),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,7 +48,7 @@ class StopCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0057B8).withOpacity(0.1),
+                  color: const Color(0xFF0057B8).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -125,23 +127,15 @@ class StopCard extends StatelessWidget {
                   );
                 }).toList(),
               ),
-              Row(
-                children: [
-                  if (nextEtaSeconds != null) ...[
-                    EtaChip(etaSeconds: nextEtaSeconds!),
-                    const SizedBox(width: 12),
-                  ],
-                  IconButton(
-                    icon: Icon(
-                      stop.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: stop.isFavorite ? Colors.red : Colors.grey,
-                      size: 20,
-                    ),
-                    onPressed: onFavoriteToggle,
-                    constraints: const BoxConstraints(),
-                    padding: EdgeInsets.zero,
-                  ),
-                ],
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.grey,
+                  size: 20,
+                ),
+                onPressed: onFavoriteToggle,
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
               ),
             ],
           ),

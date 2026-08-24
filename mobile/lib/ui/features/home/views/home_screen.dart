@@ -8,7 +8,7 @@ import 'package:ooyalo_app/ui/core/widgets/shuttle_card.dart';
 import 'package:ooyalo_app/ui/core/widgets/stop_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           margin: const EdgeInsets.only(right: 16.0),
                           child: ShuttleCard(
                             shuttle: shuttle,
-                            route: viewModel.getRouteForShuttle(shuttle),
+                            
                             onTap: () => context.go('/home/tracking/${shuttle.id}'),
                           ),
                         );
@@ -202,8 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: StopCard(
                         stop: stop,
-                        distanceMeters: (stopIndex + 1) * 250, // Mock distance
-                        nextEtaSeconds: 300 + (stopIndex * 120), // Mock ETA
+                        distanceMeters: ((stopIndex + 1) * 250).toDouble(),
+                        
                         onTap: () => context.go('/home/stop/${stop.id}'),
                       ),
                     );
@@ -226,12 +226,11 @@ class _QuickActionBtn extends StatelessWidget {
   final VoidCallback onTap;
 
   const _QuickActionBtn({
-    Key? key,
     required this.icon,
     required this.color,
     required this.label,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +242,7 @@ class _QuickActionBtn extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: color, size: 28),

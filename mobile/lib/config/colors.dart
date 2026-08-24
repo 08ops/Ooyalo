@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class OoyaloColors {
+class AppColors {
   static const Color primary = Color(0xFF0057B8);
   static const Color primaryLight = Color(0xFF3389E0);
   static const Color primaryDark = Color(0xFF003D80);
@@ -27,10 +27,10 @@ class OoyaloColors {
   static const Color dividerDark = Color(0xFF2A2A3E);
   
   // Occupancy Colors
-  static const Color occupancyLow = Color(0xFF00A86B); // green
-  static const Color occupancyMedium = Color(0xFFFFC107); // yellow
-  static const Color occupancyHigh = Color(0xFFFF6B35); // orange
-  static const Color occupancyFull = Color(0xFFE53935); // red
+  static const Color occupancyLow = Color(0xFF00A86B);
+  static const Color occupancyMedium = Color(0xFFFFC107);
+  static const Color occupancyHigh = Color(0xFFFF6B35);
+  static const Color occupancyFull = Color(0xFFE53935);
   
   // Status Colors
   static const Color statusOperating = Color(0xFF00A86B);
@@ -38,4 +38,4 @@ class OoyaloColors {
   static const Color statusDisrupted = Color(0xFFE53935);
 }
 
-typedef AppColors = OoyaloColors;
+typedef OoyaloColors = AppColors;

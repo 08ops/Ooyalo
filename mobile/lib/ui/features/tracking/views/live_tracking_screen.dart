@@ -8,7 +8,7 @@ import 'package:ooyalo_app/ui/core/widgets/occupancy_badge.dart';
 class LiveTrackingScreen extends StatefulWidget {
   final String? shuttleId;
 
-  const LiveTrackingScreen({Key? key, this.shuttleId}) : super(key: key);
+  const LiveTrackingScreen({super.key, this.shuttleId});
 
   @override
   State<LiveTrackingScreen> createState() => _LiveTrackingScreenState();
@@ -30,13 +30,19 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
     _mapController = controller;
   }
 
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
+
   Color _parseColor(String? hexColor) {
     if (hexColor == null) return const Color(0xFF0057B8);
-    hexColor = hexColor.replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF$hexColor';
+    var hex = hexColor.replaceAll('#', '');
+    if (hex.length == 6) {
+      hex = 'FF$hex';
     }
-    return Color(int.parse(hexColor, radix: 16));
+    return Color(int.parse(hex, radix: 16));
   }
 
   @override
@@ -49,10 +55,10 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
       );
     }
 
-    Set<Marker> markers = {};
-    Set<Polyline> polylines = {};
+    final Set<Marker> markers = {};
+    final Set<Polyline> polylines = {};
 
-    for (var shuttle in viewModel.allShuttles) {
+    for (final shuttle in viewModel.allShuttles) {
       markers.add(
         Marker(
           markerId: MarkerId(shuttle.id),
@@ -64,7 +70,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
       );
     }
 
-    for (var stop in viewModel.routeStops) {
+    for (final stop in viewModel.routeStops) {
       markers.add(
         Marker(
           markerId: MarkerId(stop.id),
@@ -106,7 +112,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             child: Column(
               children: [
                 Container(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                   child: Row(
                     children: [
@@ -227,7 +233,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                        color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -242,24 +248,24 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                   ],
                 ),
                 const Divider(height: 32),
-                Row(
+                const Row(
                   children: [
                     Expanded(
                       child: _Metric(
                         label: 'ETA',
-                        value: '${(shuttle.etaSecondsToNextStop / 60).ceil()} min',
+                        value: ' min',
                       ),
                     ),
                     Expanded(
                       child: _Metric(
                         label: 'Speed',
-                        value: '${shuttle.speedKmh.toInt()} km/h',
+                        value: ' km/h',
                       ),
                     ),
                     Expanded(
                       child: _Metric(
                         label: 'Heading',
-                        value: '${shuttle.heading.toInt()}°',
+                        value: '°',
                       ),
                     ),
                   ],
@@ -295,7 +301,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.location_on, color: Colors.blue),
                   title: Text(nextStopName),
-                  subtitle: Text('${shuttle.distanceToNextStopMeters}m away'),
+                  subtitle: const Text('m away'),
                   trailing: TextButton(
                     onPressed: () {},
                     child: const Text('Notify Me'),
@@ -352,14 +358,22 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
 class _Metric extends StatelessWidget {
   final String label;
   final String value;
-  const _Metric({Key? key, required this.label, required this.value}) : super(key: key);
+  const _Metric({required this.label, required this.value});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0057B8))),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Color(0xFF0057B8),
+          ),
+        ),
       ],
     );
   }

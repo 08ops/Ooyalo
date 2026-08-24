@@ -7,7 +7,7 @@ import 'package:ooyalo_app/ui/core/widgets/route_card.dart';
 import 'package:ooyalo_app/config/colors.dart';
 
 class RoutesScreen extends StatefulWidget {
-  const RoutesScreen({Key? key}) : super(key: key);
+  const RoutesScreen({super.key});
 
   @override
   State<RoutesScreen> createState() => _RoutesScreenState();

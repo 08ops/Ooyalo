@@ -6,11 +6,11 @@ class OccupancyBadge extends StatelessWidget {
   final bool compact;
 
   const OccupancyBadge({
-    Key? key,
+    super.key,
     required this.level,
     this.percentage,
     this.compact = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class OccupancyBadge extends StatelessWidget {
             Text(
               '${(percentage! * 100).toInt()}%',
               style: TextStyle(
-                color: textColor.withOpacity(0.9),
+                color: textColor.withValues(alpha: 0.9),
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),

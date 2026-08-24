@@ -23,7 +23,7 @@ class AlertsViewModel extends ChangeNotifier {
 
   List<AlertModel> get filteredAlerts {
     if (selectedCategory == 'all') return alerts;
-    return alerts.where((a) => a.category?.toLowerCase() == selectedCategory.toLowerCase()).toList();
+    return alerts.where((a) => (a.category?.toLowerCase() ?? '') == selectedCategory.toLowerCase()).toList();
   }
 
   void setCategory(String category) {

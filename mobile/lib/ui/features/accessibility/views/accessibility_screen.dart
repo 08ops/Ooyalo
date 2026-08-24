@@ -4,7 +4,7 @@ import 'package:ooyalo_app/config/colors.dart';
 import 'package:ooyalo_app/ui/core/widgets/ooyalo_card.dart';
 
 class AccessibilityScreen extends StatefulWidget {
-  const AccessibilityScreen({Key? key}) : super(key: key);
+  const AccessibilityScreen({super.key});
 
   @override
   State<AccessibilityScreen> createState() => _AccessibilityScreenState();
@@ -22,7 +22,7 @@ class _AccessibilityScreenState extends State<AccessibilityScreen> {
       requestSent = true;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Driver has been notified. Assistance is on the way.'),
         backgroundColor: AppColors.secondary,
       ),
@@ -50,7 +50,7 @@ class _AccessibilityScreenState extends State<AccessibilityScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  Icon(Icons.accessible_forward, size: 64, color: AppColors.primary),
+                  const Icon(Icons.accessible_forward, size: 64, color: AppColors.primary),
                   const SizedBox(height: 16),
                   Text(
                     'Accessibility Options',
@@ -120,7 +120,7 @@ class _AccessibilityScreenState extends State<AccessibilityScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.1),
+                      color: AppColors.error.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.sos, color: AppColors.error, size: 28),
@@ -175,7 +175,7 @@ class _AccessibilityScreenState extends State<AccessibilityScreen> {
               child: Text(description, style: GoogleFonts.plusJakartaSans(fontSize: 12)),
             ),
             secondary: Icon(icon, color: AppColors.primary),
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
           ),
           if (showRequestButton) ...[
             const Divider(height: 1),

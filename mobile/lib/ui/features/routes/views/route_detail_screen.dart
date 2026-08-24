@@ -8,7 +8,7 @@ import 'package:ooyalo_app/ui/core/widgets/shuttle_card.dart';
 
 class RouteDetailScreen extends StatefulWidget {
   final String routeId;
-  const RouteDetailScreen({Key? key, required this.routeId}) : super(key: key);
+  const RouteDetailScreen({super.key, required this.routeId});
 
   @override
   State<RouteDetailScreen> createState() => _RouteDetailScreenState();
@@ -16,6 +16,12 @@ class RouteDetailScreen extends StatefulWidget {
 
 class _RouteDetailScreenState extends State<RouteDetailScreen> {
   GoogleMapController? _mapController;
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +142,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -203,7 +209,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                     Expanded(
                       child: Container(
                         width: 2,
-                        color: routeColor.withOpacity(0.3),
+                        color: routeColor.withValues(alpha: 0.3),
                       ),
                     ),
                 ],
@@ -227,7 +233,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                           margin: const EdgeInsets.only(top: 8),
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.accent.withOpacity(0.1),
+                            color: AppColors.accent.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: AppColors.accent),
                           ),

@@ -1,57 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:ooyalo_app/data/models/shuttle_model.dart';
 import 'package:ooyalo_app/data/models/route_model.dart';
-import 'package:ooyalo_app/ui/core/widgets/ooyalo_card.dart';
-import 'package:ooyalo_app/ui/core/widgets/eta_chip.dart';
+import 'package:ooyalo_app/ui/features/home/view_models/home_view_model.dart';
 import 'package:ooyalo_app/ui/core/widgets/occupancy_badge.dart';
+import 'package:ooyalo_app/ui/core/widgets/eta_chip.dart';
 
 class ShuttleCard extends StatelessWidget {
   final ShuttleModel shuttle;
-  final ShuttleRouteModel? route;
   final VoidCallback? onTap;
 
   const ShuttleCard({
-    Key? key,
+    super.key,
     required this.shuttle,
-    this.route,
     this.onTap,
-  }) : super(key: key);
+  });
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'in_service':
+        return Colors.green;
+      case 'delayed':
+        return Colors.orange;
+      case 'out_of_service':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 
   Color _parseColor(String? hexColor) {
     if (hexColor == null) return const Color(0xFF0057B8);
-    hexColor = hexColor.replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
+    var hex = hexColor.replaceAll('#', '');
+    if (hex.length == 6) {
+      hex = 'FF';
     }
-    return Color(int.parse(hexColor, radix: 16));
+    return Color(int.parse(hex, radix: 16));
   }
 
   @override
   Widget build(BuildContext context) {
+    final homeViewModel = context.watch<HomeViewModel>();
+    final ShuttleRouteModel? route = homeViewModel.getRouteForShuttle(shuttle);
     final routeColor = _parseColor(route?.color);
-    
-    return OoyaloCard(
-      padding: EdgeInsets.zero,
-      onTap: onTap,
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Container(
-              width: 4,
-              decoration: BoxDecoration(
-                color: routeColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                ),
-              ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        onTap: onTap ?? () => context.push('/tracking?shuttleId='),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: routeColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.directions_bus,
+                        color: routeColor,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,43 +94,25 @@ class ShuttleCard extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              Text(
-                                shuttle.plateNumber,
-                                style: TextStyle(
-                                  fontFamily: 'monospace',
-                                  color: Colors.grey.shade600,
-                                  fontSize: 12,
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: _getStatusColor(shuttle.status),
+                                  shape: BoxShape.circle,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, size: 14, color: Colors.grey.shade500),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
-                                  shuttle.nextStopId.replaceAll('stop-', '').replaceAll('-', ' ').toUpperCase(),
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 13,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
+                          const SizedBox(height: 4),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: routeColor.withOpacity(0.1),
+                              color: routeColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              route?.name ?? 'Unknown Route',
+                              route?.name ?? 'Campus Loop',
                               style: TextStyle(
                                 color: routeColor,
                                 fontSize: 12,
@@ -135,8 +145,8 @@ class ShuttleCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

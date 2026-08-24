@@ -6,11 +6,11 @@ class EtaChip extends StatefulWidget {
   final Color? color;
 
   const EtaChip({
-    Key? key,
+    super.key,
     required this.etaSeconds,
     this.compact = false,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   State<EtaChip> createState() => _EtaChipState();
@@ -64,7 +64,7 @@ class _EtaChipState extends State<EtaChip> with SingleTickerProviderStateMixin {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: primaryColor.withOpacity(0.1),
+        color: primaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
