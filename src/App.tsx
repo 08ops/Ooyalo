@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import confetti from 'canvas-confetti';
 import { 
   CampusStop, 
   ShuttleRoute, 
@@ -24,9 +23,7 @@ import { LiveMap } from './components/LiveMap';
 import { StudentArrivalPanel } from './components/StudentArrivalPanel';
 import { HardwareTelemetryHub } from './components/HardwareTelemetryHub';
 import { DispatchOps } from './components/DispatchOps';
-import { HardwareBlueprint } from './components/HardwareBlueprint';
 import { AdminDashboard } from './components/AdminDashboard';
-import { UssdSimulator } from './components/UssdSimulator';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { StopDetailsModal } from './components/StopDetailsModal';
 import { ShuttleDetailsDrawer } from './components/ShuttleDetailsDrawer';
@@ -147,14 +144,6 @@ export default function App() {
 
         if (triggeredNotifications.length > 0) {
           setNotifications((prev) => [...triggeredNotifications, ...prev]);
-
-          // Trigger subtle celebration when bus reaches student stop
-          confetti({
-            particleCount: 35,
-            spread: 50,
-            origin: { y: 0.8 },
-            colors: ['#10b981', '#38bdf8', '#fbbf24'],
-          });
         }
 
         return updatedShuttles;
@@ -193,12 +182,6 @@ export default function App() {
 
   const handleTriggerTestAlert = () => {
     soundEffects.playArrivalChime();
-    confetti({
-      particleCount: 40,
-      spread: 60,
-      origin: { y: 0.7 },
-      colors: ['#10b981', '#06b6d4'],
-    });
 
     const testNotif: NotificationItem = {
       id: `notif-test-${Date.now()}`,
@@ -383,16 +366,8 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'hardware-blueprint' && (
-          <HardwareBlueprint />
-        )}
-
         {activeTab === 'admin-dashboard' && (
           <AdminDashboard shuttles={shuttles} />
-        )}
-
-        {activeTab === 'ussd-simulator' && (
-          <UssdSimulator shuttles={shuttles} />
         )}
       </main>
 

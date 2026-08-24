@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { soundEffects } from '../services/soundEffects';
 
-export type ActiveTab = 'live-map' | 'student-etas' | 'hardware-hub' | 'dispatch' | 'hardware-blueprint' | 'admin-dashboard' | 'ussd-simulator';
+export type ActiveTab = 'live-map' | 'student-etas' | 'dispatch' | 'admin-dashboard' | 'hardware-hub';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -53,11 +53,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navItems: { id: ActiveTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: 'live-map', label: 'Live Map', icon: Bus },
     { id: 'student-etas', label: 'Arrival ETAs', icon: Radio },
-    { id: 'hardware-hub', label: 'IoT Telemetry', icon: Cpu },
     { id: 'dispatch', label: 'Fleet Ops', icon: ShieldCheck },
-    { id: 'admin-dashboard', label: 'Admin Dashboard', icon: LayoutDashboard },
-    { id: 'ussd-simulator', label: 'USSD Simulator', icon: Smartphone },
-    { id: 'hardware-blueprint', label: 'Hardware Spec', icon: Wrench },
+    { id: 'admin-dashboard', label: 'Analytics', icon: LayoutDashboard },
+    { id: 'hardware-hub', label: 'IoT Telemetry', icon: Cpu },
   ];
 
   return (
