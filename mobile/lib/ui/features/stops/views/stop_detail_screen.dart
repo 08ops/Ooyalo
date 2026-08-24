@@ -96,7 +96,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    'Code: ',
+                                    'Code: ${stop.code}',
                                     style: GoogleFonts.plusJakartaSans(color: Colors.white, fontSize: 12),
                                   ),
                                 ),

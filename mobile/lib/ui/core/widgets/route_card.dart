@@ -18,7 +18,7 @@ class RouteCard extends StatelessWidget {
     if (hexColor == null) return const Color(0xFF0057B8);
     var hex = hexColor.replaceAll('#', '');
     if (hex.length == 6) {
-      hex = 'FF';
+      hex = 'FF$hex';
     }
     return Color(int.parse(hex, radix: 16));
   }

@@ -34,7 +34,7 @@ class ShuttleCard extends StatelessWidget {
     if (hexColor == null) return const Color(0xFF0057B8);
     var hex = hexColor.replaceAll('#', '');
     if (hex.length == 6) {
-      hex = 'FF';
+      hex = 'FF$hex';
     }
     return Color(int.parse(hex, radix: 16));
   }
@@ -51,7 +51,7 @@ class ShuttleCard extends StatelessWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
-        onTap: onTap ?? () => context.push('/tracking?shuttleId='),
+        onTap: onTap ?? () => context.push('/tracking?shuttleId=${shuttle.id}'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(

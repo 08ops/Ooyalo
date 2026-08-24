@@ -13,6 +13,7 @@ class OoyaloTheme {
         secondary: OoyaloColors.secondary,
         error: OoyaloColors.error,
         surface: OoyaloColors.surfaceLight,
+        
       ),
       scaffoldBackgroundColor: OoyaloColors.backgroundLight,
       textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
@@ -131,6 +132,7 @@ class OoyaloTheme {
         secondary: OoyaloColors.secondaryLight,
         error: OoyaloColors.error,
         surface: OoyaloColors.surfaceDark,
+        
       ),
       scaffoldBackgroundColor: OoyaloColors.backgroundDark,
       textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme).copyWith(

@@ -248,24 +248,24 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                   ],
                 ),
                 const Divider(height: 32),
-                const Row(
+                Row(
                   children: [
                     Expanded(
                       child: _Metric(
                         label: 'ETA',
-                        value: ' min',
+                        value: '${(shuttle.etaSecondsToNextStop / 60).ceil()} min',
                       ),
                     ),
                     Expanded(
                       child: _Metric(
                         label: 'Speed',
-                        value: ' km/h',
+                        value: '${shuttle.speedKmh.toInt()} km/h',
                       ),
                     ),
                     Expanded(
                       child: _Metric(
                         label: 'Heading',
-                        value: '°',
+                        value: '${shuttle.heading.toInt()}°',
                       ),
                     ),
                   ],
@@ -301,7 +301,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.location_on, color: Colors.blue),
                   title: Text(nextStopName),
-                  subtitle: const Text('m away'),
+                  subtitle: Text('${shuttle.distanceToNextStopMeters}m away'),
                   trailing: TextButton(
                     onPressed: () {},
                     child: const Text('Notify Me'),

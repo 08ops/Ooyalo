@@ -36,7 +36,7 @@ class StopCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return OoyaloCard(
-      onTap: onTap ?? () => context.push('/stops/'),
+      onTap: onTap ?? () => context.push('/stops/${stop.id}'),
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

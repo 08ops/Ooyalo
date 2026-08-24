@@ -40,7 +40,6 @@ class OoyaloApp extends StatelessWidget {
         ProxyProvider<ShuttleApiService, ShuttleRepository>(
           update: (_, service, previous) =>
               previous ?? ShuttleRepository(apiService: service),
-          dispose: (_, repo) => repo.dispose(),
         ),
         ProxyProvider<RouteApiService, RouteRepository>(
           update: (_, service, previous) =>
@@ -97,20 +96,20 @@ class OoyaloApp extends StatelessWidget {
           create: (ctx) => AlertsViewModel(ctx.read<AlertRepository>()),
           update: (_, alert, vm) => vm ?? AlertsViewModel(alert),
         ),
-        ChangeNotifierProvider(create: (_) => ProfileViewModel(), lazy: false),
-        ChangeNotifierProvider(create: (_) => LostFoundViewModel(), lazy: false),
+        ChangeNotifierProvider<ProfileViewModel>(
+          create: (_) => ProfileViewModel(),
+        ),
+        ChangeNotifierProvider<LostFoundViewModel>(
+          create: (_) => LostFoundViewModel(),
+        ),
       ],
-      child: Consumer<ProfileViewModel>(
-        builder: (context, profile, _) {
-          return MaterialApp.router(
-            title: AppConstants.appName,
-            themeMode: profile.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            theme: OoyaloTheme.lightTheme,
-            darkTheme: OoyaloTheme.darkTheme,
-            routerConfig: goRouter,
-            debugShowCheckedModeBanner: false,
-          );
-        },
+      child: MaterialApp.router(
+        title: AppConstants.appName,
+        themeMode: ThemeMode.system,
+        theme: OoyaloTheme.lightTheme,
+        darkTheme: OoyaloTheme.darkTheme,
+        routerConfig: goRouter,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

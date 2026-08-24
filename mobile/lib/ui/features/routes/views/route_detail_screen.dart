@@ -153,7 +153,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         children: [
           _buildInfoItem(Icons.schedule, 'Frequency', '${route.frequencyMinutes} min'),
           _buildInfoItem(Icons.timelapse, 'Est. Time', '45 min'),
-          _buildInfoItem(Icons.place, 'Total Stops', '$totalStops'),
+          _buildInfoItem(Icons.place, 'Total Stops', totalStops.toString()),
         ],
       ),
     );
