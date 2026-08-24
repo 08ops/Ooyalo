@@ -228,7 +228,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    alert.category.toUpperCase(),
+                    (alert.category ?? 'general').toUpperCase(),
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,

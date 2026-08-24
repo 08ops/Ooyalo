@@ -65,14 +65,14 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                   height: 200,
                   child: GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(stop.location.latitude, stop.location.longitude),
+                      target: LatLng(stop.location.lat, stop.location.lng),
                       zoom: 16,
                     ),
                     zoomControlsEnabled: false,
                     markers: {
                       Marker(
                         markerId: MarkerId(stop.id),
-                        position: LatLng(stop.location.latitude, stop.location.longitude),
+                        position: LatLng(stop.location.lat, stop.location.lng),
                       ),
                     },
                   ),
@@ -96,7 +96,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    'Code: ${stop.code ?? stop.id.substring(0, 4).toUpperCase()}',
+                                    'Code: ${stop.code}',
                                     style: GoogleFonts.plusJakartaSans(color: Colors.white, fontSize: 12),
                                   ),
                                 ),
@@ -150,7 +150,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: (stop.amenities ?? []).map((amenity) {
+                        children: stop.amenities.map((amenity) {
                           IconData icon = Icons.check_circle_outline;
                           if (amenity.toLowerCase().contains('shelter')) icon = Icons.umbrella;
                           if (amenity.toLowerCase().contains('light')) icon = Icons.lightbulb;
@@ -200,7 +200,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
   }
 
   Widget _buildArrivalCard(shuttle) {
-    int etaMins = ((shuttle.etaSecondsToNextStop ?? 0) / 60).round();
+    int etaMins = (shuttle.etaSecondsToNextStop / 60).ceil();
     bool isUrgent = etaMins < 5;
     
     return Padding(
@@ -230,7 +230,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  OccupancyBadge(occupancyLevel: shuttle.occupancyLevel),
+                  OccupancyBadge(level: shuttle.occupancyLevel),
                 ],
               ),
             ),
@@ -246,7 +246,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                   ),
                 ),
                 Text(
-                  '350m away',
+                  '${shuttle.distanceToNextStopMeters}m away',
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 12,
                     color: Colors.grey[600],

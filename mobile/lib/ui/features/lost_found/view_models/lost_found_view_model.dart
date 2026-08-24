@@ -11,14 +11,14 @@ class LostFoundViewModel extends ChangeNotifier {
   String? error;
 
   List<String> locationOptions = [
-    'Main Gate Stop',
-    'Library Stop',
-    'JQB Stop',
-    'Night Market Stop',
-    'Pentagon Stop',
-    'Diaspora Stop',
-    'Banking Square Stop',
-    'Evandy Stop',
+    'Balme Library Central',
+    'Night Market / Food Court',
+    'Pentagon Hall Complex',
+    'TF & Evandy Hostels',
+    'Diaspora Halls',
+    'UGBS Business School / Law Faculty',
+    'Commonwealth Hall & Great Hall',
+    'Mensah Sarbah & Akuafo Halls',
   ];
 
   void setItemName(String v) {

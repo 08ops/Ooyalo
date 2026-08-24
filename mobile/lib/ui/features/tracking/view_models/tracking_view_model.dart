@@ -50,7 +50,7 @@ class TrackingViewModel extends ChangeNotifier {
       selectedRoute = routes.firstWhere((r) => r.id == shuttle.routeId);
       
       final stops = await _stopRepo.getStops();
-      routeStops = stops.where((stop) => selectedRoute?.stops?.contains(stop.id) ?? false).toList();
+      routeStops = stops.where((stop) => selectedRoute?.stops.contains(stop.id) ?? false).toList();
     } catch (_) {}
   }
 

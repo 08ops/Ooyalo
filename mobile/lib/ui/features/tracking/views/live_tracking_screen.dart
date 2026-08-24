@@ -34,7 +34,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
     if (hexColor == null) return const Color(0xFF0057B8);
     hexColor = hexColor.replaceAll('#', '');
     if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
+      hexColor = 'FF$hexColor';
     }
     return Color(int.parse(hexColor, radix: 16));
   }
@@ -53,35 +53,35 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
     Set<Polyline> polylines = {};
 
     for (var shuttle in viewModel.allShuttles) {
-      if (shuttle.latitude != null && shuttle.longitude != null) {
-        markers.add(
-          Marker(
-            markerId: MarkerId(shuttle.id),
-            position: LatLng(shuttle.latitude!, shuttle.longitude!),
-            infoWindow: InfoWindow(title: shuttle.name),
-            onTap: () => viewModel.selectShuttle(shuttle),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          ),
-        );
-      }
+      markers.add(
+        Marker(
+          markerId: MarkerId(shuttle.id),
+          position: LatLng(shuttle.currentLocation.lat, shuttle.currentLocation.lng),
+          infoWindow: InfoWindow(title: shuttle.name),
+          onTap: () => viewModel.selectShuttle(shuttle),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ),
+      );
     }
 
     for (var stop in viewModel.routeStops) {
       markers.add(
         Marker(
           markerId: MarkerId(stop.id),
-          position: LatLng(stop.latitude, stop.longitude),
+          position: LatLng(stop.location.lat, stop.location.lng),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
           infoWindow: InfoWindow(title: stop.name),
         ),
       );
     }
 
-    if (viewModel.selectedRoute != null && viewModel.selectedRoute!.pathCoordinates != null) {
+    if (viewModel.selectedRoute != null) {
       polylines.add(
         Polyline(
           polylineId: PolylineId(viewModel.selectedRoute!.id),
-          points: viewModel.selectedRoute!.pathCoordinates!.map((e) => LatLng(e.latitude, e.longitude)).toList(),
+          points: viewModel.selectedRoute!.path
+              .map((e) => LatLng(e.lat, e.lng))
+              .toList(),
           color: _parseColor(viewModel.selectedRoute!.color),
           width: 4,
         ),
@@ -152,135 +152,199 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
             ),
           ),
           if (viewModel.selectedShuttle != null)
-            DraggableScrollableSheet(
-              initialChildSize: 0.35,
-              minChildSize: 0.15,
-              maxChildSize: 0.65,
-              builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, -2))],
+            _buildShuttleSheet(context, viewModel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShuttleSheet(BuildContext context, TrackingViewModel viewModel) {
+    final shuttle = viewModel.selectedShuttle!;
+    final nextStop = viewModel.routeStops
+        .where((s) => s.id == shuttle.nextStopId)
+        .firstOrNull;
+    final nextStopName = nextStop?.name ?? shuttle.nextStopId;
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.35,
+      minChildSize: 0.15,
+      maxChildSize: 0.65,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, -2),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            controller: scrollController,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Center(
-                          child: Container(
-                            width: 40,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                        Text(
+                          shuttle.name,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  viewModel.selectedShuttle!.name,
-                                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  viewModel.selectedShuttle!.plateNumber ?? '',
-                                  style: const TextStyle(fontFamily: 'monospace', color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                viewModel.selectedShuttle!.status.replaceAll('_', ' ').toUpperCase(),
-                                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(height: 32),
-                        Row(
-                          children: [
-                            Expanded(child: _Metric(label: 'ETA', value: '${viewModel.selectedShuttle!.etaSeconds != null ? viewModel.selectedShuttle!.etaSeconds! ~/ 60 : 0} min')),
-                            Expanded(child: _Metric(label: 'Speed', value: '${viewModel.selectedShuttle!.speed ?? 0} km/h')),
-                            Expanded(child: _Metric(label: 'Heading', value: '${viewModel.selectedShuttle!.heading ?? 0}°')),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        const Text('Occupancy', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            OccupancyBadge(level: viewModel.selectedShuttle!.occupancyLevel ?? 'low', percentage: 0.45),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: LinearProgressIndicator(
-                                value: 0.45,
-                                backgroundColor: Colors.grey.shade200,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        const Text('Next Stop', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.location_on, color: Colors.blue),
-                          title: Text(viewModel.selectedShuttle!.nextStopName ?? 'Unknown'),
-                          subtitle: const Text('250m away'),
-                          trailing: TextButton(
-                            onPressed: () {},
-                            child: const Text('Notify Me'),
+                        Text(
+                          shuttle.plateNumber,
+                          style: const TextStyle(
+                            fontFamily: 'monospace',
+                            color: Colors.grey,
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF0057B8),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                                child: const Text('Track on Map', style: TextStyle(color: Colors.white)),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: viewModel.toggleFollow,
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  side: BorderSide(color: viewModel.isFollowing ? Colors.blue : Colors.grey),
-                                ),
-                                child: Text(viewModel.isFollowing ? 'Following' : 'Follow Shuttle'),
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        shuttle.status.replaceAll('_', ' ').toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _Metric(
+                        label: 'ETA',
+                        value: '${(shuttle.etaSecondsToNextStop / 60).ceil()} min',
+                      ),
+                    ),
+                    Expanded(
+                      child: _Metric(
+                        label: 'Speed',
+                        value: '${shuttle.speedKmh.toInt()} km/h',
+                      ),
+                    ),
+                    Expanded(
+                      child: _Metric(
+                        label: 'Heading',
+                        value: '${shuttle.heading.toInt()}°',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Occupancy',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    OccupancyBadge(
+                      level: shuttle.occupancyLevel,
+                      percentage: shuttle.occupancyPercent,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: shuttle.occupancyPercent.clamp(0.0, 1.0),
+                        backgroundColor: Colors.grey.shade200,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Next Stop',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.location_on, color: Colors.blue),
+                  title: Text(nextStopName),
+                  subtitle: Text('${shuttle.distanceToNextStopMeters}m away'),
+                  trailing: TextButton(
+                    onPressed: () {},
+                    child: const Text('Notify Me'),
                   ),
-                );
-              },
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0057B8),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Track on Map',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: viewModel.toggleFollow,
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          side: BorderSide(
+                            color: viewModel.isFollowing ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                        child: Text(
+                          viewModel.isFollowing ? 'Following' : 'Follow Shuttle',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

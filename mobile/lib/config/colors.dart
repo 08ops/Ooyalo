@@ -37,3 +37,5 @@ class OoyaloColors {
   static const Color statusDelayed = Color(0xFFFFC107);
   static const Color statusDisrupted = Color(0xFFE53935);
 }
+
+typedef AppColors = OoyaloColors;

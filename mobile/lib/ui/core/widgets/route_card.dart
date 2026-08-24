@@ -56,10 +56,10 @@ class RouteCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (route.description != null) ...[
+                if (route.description.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
-                    route.description!,
+                    route.description,
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 14,
@@ -72,11 +72,11 @@ class RouteCard extends StatelessWidget {
                   children: [
                     _InfoItem(
                       icon: Icons.timer_outlined,
-                      text: route.frequency ?? 'N/A',
+                      text: '${route.frequencyMinutes} min',
                     ),
                     _InfoItem(
                       icon: Icons.access_time,
-                      text: route.operatingHours ?? 'N/A',
+                      text: route.operatingHours,
                     ),
                     _InfoItem(
                       icon: Icons.directions_bus,
@@ -85,10 +85,10 @@ class RouteCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                if (route.stops != null && route.stops!.isNotEmpty)
+                if (route.stops.isNotEmpty)
                   Row(
                     children: List.generate(
-                      route.stops!.length > 5 ? 5 : route.stops!.length,
+                      route.stops.length > 5 ? 5 : route.stops.length,
                       (index) {
                         return Expanded(
                           child: Row(
@@ -101,7 +101,7 @@ class RouteCard extends StatelessWidget {
                                   shape: BoxShape.circle,
                                 ),
                               ),
-                              if (index < (route.stops!.length > 5 ? 4 : route.stops!.length - 1))
+                              if (index < (route.stops.length > 5 ? 4 : route.stops.length - 1))
                                 Expanded(
                                   child: Container(
                                     height: 2,

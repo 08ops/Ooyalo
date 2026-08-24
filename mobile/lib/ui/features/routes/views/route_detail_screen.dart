@@ -35,8 +35,12 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         
         Color routeColor = AppColors.primary;
         try {
-          routeColor = Color(int.parse(route.colorCode.replaceAll('#', '0xFF')));
+          routeColor = Color(int.parse(route.color.replaceAll('#', '0xFF')));
         } catch (_) {}
+
+        final mapTarget = route.path.isNotEmpty
+            ? LatLng(route.path.first.lat, route.path.first.lng)
+            : const LatLng(5.6514, -0.1872);
 
         return Scaffold(
           backgroundColor: AppColors.backgroundLight,
@@ -58,8 +62,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                     fit: StackFit.expand,
                     children: [
                       GoogleMap(
-                        initialCameraPosition: const CameraPosition(
-                          target: LatLng(5.6508, -0.1962),
+                        initialCameraPosition: CameraPosition(
+                          target: mapTarget,
                           zoom: 14,
                         ),
                         myLocationEnabled: true,
@@ -70,10 +74,9 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                             polylineId: PolylineId(route.id),
                             color: routeColor,
                             width: 4,
-                            points: const [
-                              LatLng(5.6508, -0.1962),
-                              LatLng(5.6480, -0.1950),
-                            ],
+                            points: route.path
+                                .map((e) => LatLng(e.lat, e.lng))
+                                .toList(),
                           ),
                         },
                       ),

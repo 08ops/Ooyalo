@@ -69,7 +69,7 @@ class StopCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${stop.code ?? ''} • ${stop.description ?? ''}',
+                      '${stop.code} • ${stop.description}',
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 12,
@@ -107,7 +107,7 @@ class StopCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: stop.amenities?.map((amenity) {
+                children: stop.amenities.map((amenity) {
                   return Container(
                     margin: const EdgeInsets.only(right: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -123,7 +123,7 @@ class StopCard extends StatelessWidget {
                       ),
                     ),
                   );
-                }).toList() ?? [],
+                }).toList(),
               ),
               Row(
                 children: [
@@ -133,8 +133,8 @@ class StopCard extends StatelessWidget {
                   ],
                   IconButton(
                     icon: Icon(
-                      stop.isFavorite == true ? Icons.favorite : Icons.favorite_border,
-                      color: stop.isFavorite == true ? Colors.red : Colors.grey,
+                      stop.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: stop.isFavorite ? Colors.red : Colors.grey,
                       size: 20,
                     ),
                     onPressed: onFavoriteToggle,

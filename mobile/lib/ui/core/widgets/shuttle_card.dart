@@ -67,7 +67,7 @@ class ShuttleCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                shuttle.plateNumber ?? '',
+                                shuttle.plateNumber,
                                 style: TextStyle(
                                   fontFamily: 'monospace',
                                   color: Colors.grey.shade600,
@@ -83,7 +83,7 @@ class ShuttleCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  shuttle.nextStopName ?? 'In Depot',
+                                  shuttle.nextStopId.replaceAll('stop-', '').replaceAll('-', ' ').toUpperCase(),
                                   style: TextStyle(
                                     color: Colors.grey.shade700,
                                     fontSize: 13,
@@ -117,13 +117,13 @@ class ShuttleCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        EtaChip(etaSeconds: shuttle.etaSeconds ?? 0),
+                        EtaChip(etaSeconds: shuttle.etaSecondsToNextStop),
                         OccupancyBadge(
-                          level: shuttle.occupancyLevel ?? 'low',
+                          level: shuttle.occupancyLevel,
                           compact: true,
                         ),
                         Text(
-                          '${shuttle.speed ?? 0} km/h',
+                          '${shuttle.speedKmh.toInt()} km/h',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade600,

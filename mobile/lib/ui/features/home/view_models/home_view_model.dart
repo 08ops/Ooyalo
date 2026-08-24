@@ -54,8 +54,8 @@ class HomeViewModel extends ChangeNotifier {
 
     nearbyStops = List.from(stops);
     nearbyStops.sort((a, b) {
-      final distA = _distance(campusLat, campusLng, a.latitude, a.longitude);
-      final distB = _distance(campusLat, campusLng, b.latitude, b.longitude);
+      final distA = _distance(campusLat, campusLng, a.location.lat, a.location.lng);
+      final distB = _distance(campusLat, campusLng, b.location.lat, b.location.lng);
       return distA.compareTo(distB);
     });
   }

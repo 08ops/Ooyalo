@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ooyalo_app/ui/core/shell/main_scaffold.dart';
-import 'package:ooyalo_app/ui/features/home/screens/home_screen.dart';
-import 'package:ooyalo_app/ui/features/tracking/screens/live_tracking_screen.dart';
-import 'package:ooyalo_app/ui/features/stops/screens/stop_detail_screen.dart';
-import 'package:ooyalo_app/ui/features/lost_found/screens/lost_item_form_screen.dart';
-import 'package:ooyalo_app/ui/features/home/screens/accessibility_screen.dart';
-import 'package:ooyalo_app/ui/features/routes/screens/routes_screen.dart';
-import 'package:ooyalo_app/ui/features/routes/screens/route_detail_screen.dart';
-import 'package:ooyalo_app/ui/features/alerts/screens/alerts_screen.dart';
-import 'package:ooyalo_app/ui/features/profile/screens/profile_screen.dart';
+import 'package:ooyalo_app/ui/features/home/views/home_screen.dart';
+import 'package:ooyalo_app/ui/features/tracking/views/live_tracking_screen.dart';
+import 'package:ooyalo_app/ui/features/stops/views/stop_detail_screen.dart';
+import 'package:ooyalo_app/ui/features/lost_found/views/lost_item_form_screen.dart';
+import 'package:ooyalo_app/ui/features/accessibility/views/accessibility_screen.dart';
+import 'package:ooyalo_app/ui/features/routes/views/routes_screen.dart';
+import 'package:ooyalo_app/ui/features/routes/views/route_detail_screen.dart';
+import 'package:ooyalo_app/ui/features/alerts/views/alerts_screen.dart';
+import 'package:ooyalo_app/ui/features/profile/views/profile_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
