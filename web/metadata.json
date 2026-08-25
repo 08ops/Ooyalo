@@ -1,0 +1,6 @@
+{
+  "name": "Ooyalo Campus Shuttle Tracker",
+  "description": "Real-time campus shuttle tracking mobile platform with live GPS map, arrival time ETAs, stop notifications, bus occupancy, IoT telemetry ingest & hardware monitor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

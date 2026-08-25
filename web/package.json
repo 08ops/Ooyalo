@@ -1,12 +1,11 @@
 {
-  "name": "react-example",
-  "name": "ooyalo-monorepo",
+  "name": "ooyalo-web",
   "private": true,
-  "version": "0.0.0",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "concurrently -n \"api,web\" -c \"cyan,green\" \"tsx src/server/index.ts\" \"vite --port=3000 --host=0.0.0.0\"",
+    "dev:web": "vite --port=3000 --host=0.0.0.0",
     "dev:server": "tsx src/server/index.ts",
     "start-server": "tsx src/server/index.ts",
     "build": "vite build",
@@ -49,13 +48,5 @@
     "typescript": "~5.8.2",
     "vite": "^6.2.3",
     "vite-plugin-express": "^1.0.3"
-    "dev": "npm run dev --prefix web",
-    "dev:web": "npm run dev:web --prefix web",
-    "dev:server": "npm run dev:server --prefix web",
-    "dev:mobile": "cd mobile && flutter run",
-    "build": "npm run build --prefix web",
-    "build:web": "npm run build --prefix web",
-    "lint": "npm run lint --prefix web",
-    "test:mobile": "cd mobile && flutter test --no-pub"
   }
 }

@@ -23,6 +23,7 @@ The ecosystem consists of two core clients and a unified backend:
 ```mermaid
 graph TD
     A[IoT Shuttle GPS Trackers / Hardware] -->|HTTP / Telemetry Ingest| B[Express API Server src/server]
+    A[IoT Shuttle GPS Trackers / Hardware] -->|HTTP / Telemetry Ingest| B[Express API Server web/src/server]
     B -->|Drizzle ORM| C[(PostgreSQL Database)]
     B -->|Firebase Auth| D[Firebase Admin]
     
@@ -30,6 +31,7 @@ graph TD
     F[💻 Web Dashboard src/] -->|REST / Realtime| B
     
     F -->|GenAI SDK| G[Google Gemini AI Transit Engine]
+    F[💻 Web Dashboard web/src/] -->|REST / Realtime| B
 ```
 
 ---
@@ -39,8 +41,24 @@ graph TD
 ```
 Ooyalo/
 ├── mobile/                        # 📱 Flutter Mobile Application
+├── web/                           # 💻 Web Dashboard, Express Backend API & DB
+│   ├── src/                       # React 19 UI, Express server, Drizzle DB, services
+│   │   ├── components/            # React UI components (LiveMap, DispatchOps, etc.)
+│   │   ├── data/                  # Campus mock coordinates & routes
+│   │   ├── db/                    # PostgreSQL Drizzle schema & migrations
+│   │   ├── lib/                   # Firebase Auth & Admin client
+│   │   ├── server/                # Express API server & telemetry ingestion
+│   │   └── services/              # Simulation engine & sound effects
+│   ├── index.html                 # Web HTML entry
+│   ├── package.json               # Web & server dependencies
+│   ├── tsconfig.json              # TypeScript configuration
+│   ├── vite.config.ts             # Vite build & reverse proxy config
+│   └── .env.example               # Environment variable template
+│
+├── mobile/                        # 📱 Flutter Cross-Platform Mobile Application
 │   ├── lib/                       # App source (UI, ViewModels, Repositories, Services)
 │   ├── test/                      # Automated unit & integration tests
+│   ├── android/                   # Android native platform files
 │   └── pubspec.yaml               # Flutter package configuration & dependencies
 │
 ├── src/                           # 💻 Web Dashboard & Fleet Console
@@ -56,6 +74,9 @@ Ooyalo/
 ├── package.json                   # Web & server dependencies (React, Vite, Express, Drizzle)
 ├── tsconfig.json                  # TypeScript configuration
 └── vite.config.ts                 # Vite build configuration
+├── package.json                   # 🚀 Root orchestration scripts (dev, build, lint)
+├── .gitignore                     # Monorepo gitignore rules
+└── README.md                      # Documentation
 ```
 
 ---
@@ -65,13 +86,17 @@ Ooyalo/
 ### 1. Web Dashboard & Server Setup
 
 **Prerequisites:** Node.js (v18+) or Bun
+**Prerequisites:** Node.js (v18+)
 
 1. Install dependencies:
+1. Install web dependencies:
    ```bash
    npm install
+   cd web && npm install && cd ..
    ```
 
 2. Configure environment variables:
+2. Start development server & API (Runs both Express API on `:3001` and Vite on `:3000`):
    ```bash
    cp .env.example .env
    ```
@@ -82,6 +107,9 @@ Ooyalo/
    npm run dev
    ```
    The dashboard runs at `http://localhost:3000`.
+   * Or run individually:
+     * `npm run dev:server` (Express API on `http://localhost:3001`)
+     * `npm run dev:web` (Vite UI on `http://localhost:3000`)
 
 ---
 
