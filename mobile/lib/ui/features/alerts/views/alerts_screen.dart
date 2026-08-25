@@ -6,7 +6,7 @@ import 'package:ooyalo_app/config/colors.dart';
 import 'package:ooyalo_app/ui/core/widgets/ooyalo_card.dart';
 
 class AlertsScreen extends StatefulWidget {
-  const AlertsScreen({Key? key}) : super(key: key);
+  const AlertsScreen({super.key});
 
   @override
   State<AlertsScreen> createState() => _AlertsScreenState();
@@ -107,7 +107,6 @@ class _AlertsScreenState extends State<AlertsScreen> {
                 cat,
                 style: GoogleFonts.plusJakartaSans(
                   color: isSelected ? Colors.white : Colors.black87,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
               selected: isSelected,
@@ -130,10 +129,10 @@ class _AlertsScreenState extends State<AlertsScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppColors.secondary.withOpacity(0.1),
+              color: AppColors.secondary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.check_circle, size: 64, color: AppColors.secondary),
+            child: const Icon(Icons.check_circle, size: 64, color: AppColors.secondary),
           ),
           const SizedBox(height: 24),
           Text(
@@ -179,7 +178,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: color, size: 24),
@@ -228,7 +227,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    alert.category.toUpperCase(),
+                    (alert.category ?? 'general').toUpperCase(),
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,

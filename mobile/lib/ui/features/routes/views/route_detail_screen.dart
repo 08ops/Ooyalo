@@ -8,7 +8,7 @@ import 'package:ooyalo_app/ui/core/widgets/shuttle_card.dart';
 
 class RouteDetailScreen extends StatefulWidget {
   final String routeId;
-  const RouteDetailScreen({Key? key, required this.routeId}) : super(key: key);
+  const RouteDetailScreen({super.key, required this.routeId});
 
   @override
   State<RouteDetailScreen> createState() => _RouteDetailScreenState();
@@ -16,6 +16,12 @@ class RouteDetailScreen extends StatefulWidget {
 
 class _RouteDetailScreenState extends State<RouteDetailScreen> {
   GoogleMapController? _mapController;
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +41,12 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         
         Color routeColor = AppColors.primary;
         try {
-          routeColor = Color(int.parse(route.colorCode.replaceAll('#', '0xFF')));
+          routeColor = Color(int.parse(route.color.replaceAll('#', '0xFF')));
         } catch (_) {}
+
+        final mapTarget = route.path.isNotEmpty
+            ? LatLng(route.path.first.lat, route.path.first.lng)
+            : const LatLng(5.6514, -0.1872);
 
         return Scaffold(
           backgroundColor: AppColors.backgroundLight,
@@ -58,8 +68,8 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                     fit: StackFit.expand,
                     children: [
                       GoogleMap(
-                        initialCameraPosition: const CameraPosition(
-                          target: LatLng(5.6508, -0.1962),
+                        initialCameraPosition: CameraPosition(
+                          target: mapTarget,
                           zoom: 14,
                         ),
                         myLocationEnabled: true,
@@ -70,10 +80,9 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                             polylineId: PolylineId(route.id),
                             color: routeColor,
                             width: 4,
-                            points: const [
-                              LatLng(5.6508, -0.1962),
-                              LatLng(5.6480, -0.1950),
-                            ],
+                            points: route.path
+                                .map((e) => LatLng(e.lat, e.lng))
+                                .toList(),
                           ),
                         },
                       ),
@@ -133,7 +142,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -144,7 +153,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         children: [
           _buildInfoItem(Icons.schedule, 'Frequency', '${route.frequencyMinutes} min'),
           _buildInfoItem(Icons.timelapse, 'Est. Time', '45 min'),
-          _buildInfoItem(Icons.place, 'Total Stops', '$totalStops'),
+          _buildInfoItem(Icons.place, 'Total Stops', totalStops.toString()),
         ],
       ),
     );
@@ -200,7 +209,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                     Expanded(
                       child: Container(
                         width: 2,
-                        color: routeColor.withOpacity(0.3),
+                        color: routeColor.withValues(alpha: 0.3),
                       ),
                     ),
                 ],
@@ -224,7 +233,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                           margin: const EdgeInsets.only(top: 8),
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.accent.withOpacity(0.1),
+                            color: AppColors.accent.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: AppColors.accent),
                           ),

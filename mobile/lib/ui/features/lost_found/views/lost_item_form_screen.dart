@@ -6,7 +6,7 @@ import 'package:ooyalo_app/config/colors.dart';
 import 'package:intl/intl.dart';
 
 class LostItemFormScreen extends StatelessWidget {
-  const LostItemFormScreen({Key? key}) : super(key: key);
+  const LostItemFormScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class LostItemFormScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.1),
+                color: AppColors.secondary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.check_circle, size: 80, color: AppColors.secondary),
@@ -97,7 +97,7 @@ class LostItemFormScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  Icon(Icons.search, size: 64, color: AppColors.primary),
+                  const Icon(Icons.search, size: 64, color: AppColors.primary),
                   const SizedBox(height: 16),
                   Text(
                     'Lost Something?',
@@ -160,7 +160,7 @@ class LostItemFormScreen extends StatelessWidget {
                 ),
               ),
               hint: const Text('Select stop or bus'),
-              value: viewModel.lastSeenLocation.isEmpty ? null : viewModel.lastSeenLocation,
+              initialValue: viewModel.lastSeenLocation.isEmpty ? null : viewModel.lastSeenLocation,
               items: viewModel.locationOptions.map((loc) {
                 return DropdownMenuItem(value: loc, child: Text(loc));
               }).toList(),

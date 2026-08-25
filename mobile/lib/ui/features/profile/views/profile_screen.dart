@@ -7,7 +7,7 @@ import 'package:ooyalo_app/config/colors.dart';
 import 'package:ooyalo_app/ui/core/widgets/ooyalo_card.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.2),
+                    color: AppColors.accent.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -144,7 +144,7 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Icon(Icons.place, color: AppColors.primary, size: 32),
+                    const Icon(Icons.place, color: AppColors.primary, size: 32),
                     const SizedBox(height: 8),
                     Text('Saved Stops', style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600)),
                     const SizedBox(height: 4),
@@ -159,7 +159,7 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Icon(Icons.directions_bus, color: AppColors.secondary, size: 32),
+                    const Icon(Icons.directions_bus, color: AppColors.secondary, size: 32),
                     const SizedBox(height: 8),
                     Text('Saved Routes', style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600)),
                     const SizedBox(height: 4),

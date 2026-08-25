@@ -8,7 +8,7 @@ import 'package:ooyalo_app/ui/core/widgets/shuttle_card.dart';
 import 'package:ooyalo_app/ui/core/widgets/stop_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeViewModel>().loadData();
+      context.read<HomeViewModel>().loadDashboardData();
     });
   }
 
@@ -98,33 +98,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _QuickActionBtn(
-                      icon: Icons.location_on,
-                      color: const Color(0xFF0057B8),
-                      label: 'Track Shuttle',
-                      onTap: () => context.go('/track'),
+                    Expanded(
+                      child: _QuickActionCard(
+                        icon: Icons.alt_route,
+                        label: 'Routes',
+                        color: const Color(0xFF0057B8),
+                        onTap: () => context.go('/routes'),
+                      ),
                     ),
-                    _QuickActionBtn(
-                      icon: Icons.route,
-                      color: const Color(0xFF00A86B),
-                      label: 'View Routes',
-                      onTap: () => context.go('/routes'),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickActionCard(
+                        icon: Icons.pin_drop,
+                        label: 'Stops',
+                        color: const Color(0xFF00A86B),
+                        onTap: () => context.go('/routes'),
+                      ),
                     ),
-                    _QuickActionBtn(
-                      icon: Icons.search,
-                      color: const Color(0xFFFFC107),
-                      label: 'Lost Item',
-                      onTap: () => context.go('/home/lost-found'),
-                    ),
-                    _QuickActionBtn(
-                      icon: Icons.accessibility,
-                      color: Colors.purple,
-                      label: 'Accessibility',
-                      onTap: () => context.go('/home/accessibility'),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickActionCard(
+                        icon: Icons.find_in_page,
+                        label: 'Lost & Found',
+                        color: const Color(0xFFFF6B35),
+                        onTap: () => context.go('/home/lost-found'),
+                      ),
                     ),
                   ],
                 ),
@@ -135,12 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Live Shuttles',
+                          'Active Shuttles',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -166,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           margin: const EdgeInsets.only(right: 16.0),
                           child: ShuttleCard(
                             shuttle: shuttle,
-                            route: viewModel.getRouteForShuttle(shuttle),
                             onTap: () => context.go('/home/tracking/${shuttle.id}'),
                           ),
                         );
@@ -202,8 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: StopCard(
                         stop: stop,
-                        distanceMeters: (stopIndex + 1) * 250, // Mock distance
-                        nextEtaSeconds: 300 + (stopIndex * 120), // Mock ETA
+                        distanceMeters: ((stopIndex + 1) * 250).toDouble(),
                         onTap: () => context.go('/home/stop/${stop.id}'),
                       ),
                     );
@@ -219,44 +218,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _QuickActionBtn extends StatelessWidget {
+class _QuickActionCard extends StatelessWidget {
   final IconData icon;
-  final Color color;
   final String label;
+  final Color color;
   final VoidCallback onTap;
 
-  const _QuickActionBtn({
-    Key? key,
+  const _QuickActionCard({
     required this.icon,
-    required this.color,
     required this.label,
+    required this.color,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 28),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 24),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+            ),
+          ],
+        ),
       ),
     );
   }

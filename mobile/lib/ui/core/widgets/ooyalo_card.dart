@@ -8,13 +8,13 @@ class OoyaloCard extends StatelessWidget {
   final double? elevation;
 
   const OoyaloCard({
-    Key? key,
+    super.key,
     required this.child,
     this.padding,
     this.onTap,
     this.color,
     this.elevation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class OoyaloCard extends StatelessWidget {
         boxShadow: [
           if (cardElevation > 0)
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 12.0,
               offset: const Offset(0, 4),
             ),

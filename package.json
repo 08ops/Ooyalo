@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx src/server/index.ts & vite --port=3000 --host=0.0.0.0",
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev:server": "tsx src/server/index.ts",
     "start-server": "tsx src/server/index.ts",
     "build": "vite build",
     "preview": "vite preview",
@@ -38,6 +39,7 @@
     "@types/node": "^22.14.0",
     "@types/pg": "^8.23.1",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^10.0.5",
     "drizzle-kit": "^0.31.10",
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",

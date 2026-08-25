@@ -39,7 +39,7 @@ class StopViewModel extends ChangeNotifier {
 
   List<ShuttleModel> get sortedArrivingShuttles {
     final sorted = List<ShuttleModel>.from(arrivingShuttles);
-    sorted.sort((a, b) => (a.etaSecondsToNextStop ?? 0).compareTo(b.etaSecondsToNextStop ?? 0));
+    sorted.sort((a, b) => a.etaSecondsToNextStop.compareTo(b.etaSecondsToNextStop));
     return sorted;
   }
 }

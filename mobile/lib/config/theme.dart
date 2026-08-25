@@ -13,7 +13,7 @@ class OoyaloTheme {
         secondary: OoyaloColors.secondary,
         error: OoyaloColors.error,
         surface: OoyaloColors.surfaceLight,
-        background: OoyaloColors.backgroundLight,
+        
       ),
       scaffoldBackgroundColor: OoyaloColors.backgroundLight,
       textTheme: GoogleFonts.plusJakartaSansTextTheme().copyWith(
@@ -36,10 +36,10 @@ class OoyaloTheme {
         surfaceTintColor: Colors.transparent,
         iconTheme: IconThemeData(color: OoyaloColors.textPrimary),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: OoyaloColors.surfaceLight,
         elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.05),
+        shadowColor: Colors.black.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
@@ -95,11 +95,11 @@ class OoyaloTheme {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        indicatorColor: OoyaloColors.primary.withOpacity(0.1),
+        indicatorColor: OoyaloColors.primary.withValues(alpha: 0.1),
         backgroundColor: OoyaloColors.surfaceLight,
         elevation: 8,
-        labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return GoogleFonts.plusJakartaSans(
               color: OoyaloColors.primary,
               fontSize: 12,
@@ -112,8 +112,8 @@ class OoyaloTheme {
             fontWeight: FontWeight.w500,
           );
         }),
-        iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: OoyaloColors.primary);
           }
           return const IconThemeData(color: OoyaloColors.textSecondary);
@@ -132,7 +132,7 @@ class OoyaloTheme {
         secondary: OoyaloColors.secondaryLight,
         error: OoyaloColors.error,
         surface: OoyaloColors.surfaceDark,
-        background: OoyaloColors.backgroundDark,
+        
       ),
       scaffoldBackgroundColor: OoyaloColors.backgroundDark,
       textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme).copyWith(
@@ -155,10 +155,10 @@ class OoyaloTheme {
         surfaceTintColor: Colors.transparent,
         iconTheme: IconThemeData(color: OoyaloColors.textLight),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: OoyaloColors.cardDark,
         elevation: 4,
-        shadowColor: Colors.black.withOpacity(0.2),
+        shadowColor: Colors.black.withValues(alpha: 0.2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
@@ -214,11 +214,11 @@ class OoyaloTheme {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        indicatorColor: OoyaloColors.primary.withOpacity(0.2),
+        indicatorColor: OoyaloColors.primary.withValues(alpha: 0.2),
         backgroundColor: OoyaloColors.surfaceDark,
         elevation: 8,
-        labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return GoogleFonts.plusJakartaSans(
               color: OoyaloColors.primaryLight,
               fontSize: 12,
@@ -231,8 +231,8 @@ class OoyaloTheme {
             fontWeight: FontWeight.w500,
           );
         }),
-        iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: OoyaloColors.primaryLight);
           }
           return const IconThemeData(color: OoyaloColors.textSecondary);

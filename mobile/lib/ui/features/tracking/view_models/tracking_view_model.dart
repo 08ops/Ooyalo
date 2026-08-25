@@ -11,36 +11,36 @@ class TrackingViewModel extends ChangeNotifier {
   final RouteRepository _routeRepo;
   final StopRepository _stopRepo;
 
+  TrackingViewModel(this._shuttleRepo, this._routeRepo, this._stopRepo);
+
+  List<ShuttleModel> allShuttles = [];
   ShuttleModel? selectedShuttle;
   ShuttleRouteModel? selectedRoute;
-  List<ShuttleModel> allShuttles = [];
   List<StopModel> routeStops = [];
   
   bool isFollowing = false;
   bool isLoading = true;
-
-  TrackingViewModel(this._shuttleRepo, this._routeRepo, this._stopRepo);
 
   Future<void> loadData({String? shuttleId}) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final shuttles = await _shuttleRepo.getShuttles();
-      allShuttles = shuttles;
-
+      allShuttles = await _shuttleRepo.getShuttles();
+      
       if (shuttleId != null) {
-        try {
-          final shuttle = allShuttles.firstWhere((s) => s.id == shuttleId);
-          await _selectShuttle(shuttle);
-        } catch (_) {}
+        selectedShuttle = allShuttles.where((s) => s.id == shuttleId).firstOrNull;
+      } else if (allShuttles.isNotEmpty) {
+        selectedShuttle = allShuttles.first;
       }
-    } catch (e) {
-      // Handle error
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+
+      if (selectedShuttle != null) {
+        await _selectShuttle(selectedShuttle!);
+      }
+    } catch (_) {}
+
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> _selectShuttle(ShuttleModel shuttle) async {
@@ -50,7 +50,7 @@ class TrackingViewModel extends ChangeNotifier {
       selectedRoute = routes.firstWhere((r) => r.id == shuttle.routeId);
       
       final stops = await _stopRepo.getStops();
-      routeStops = stops.where((stop) => selectedRoute?.stops?.contains(stop.id) ?? false).toList();
+      routeStops = stops.where((stop) => selectedRoute?.stops.contains(stop.id) ?? false).toList();
     } catch (_) {}
   }
 
@@ -73,9 +73,5 @@ class TrackingViewModel extends ChangeNotifier {
   void toggleFollow() {
     isFollowing = !isFollowing;
     notifyListeners();
-  }
-
-  List<StopModel> getStopsForRoute(String routeId) {
-    return routeStops; // Simplification, would normally filter global stops list
   }
 }

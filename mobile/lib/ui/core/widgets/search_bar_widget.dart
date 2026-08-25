@@ -7,12 +7,12 @@ class OoyaloSearchBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   const OoyaloSearchBar({
-    Key? key,
+    super.key,
     this.controller,
     required this.hintText,
     this.onTap,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
