@@ -107,9 +107,8 @@ app.get('/api/stops', async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== 'development' || process.env.RUN_EXPRESS_DIRECTLY) {
-  const port = 3001;
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`🚀 Express API server listening on http://localhost:${port}`);
+});
+
