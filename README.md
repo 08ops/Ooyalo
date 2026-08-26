@@ -22,15 +22,11 @@ The ecosystem consists of two core clients and a unified backend:
 
 ```mermaid
 graph TD
-    A[IoT Shuttle GPS Trackers / Hardware] -->|HTTP / Telemetry Ingest| B[Express API Server src/server]
     A[IoT Shuttle GPS Trackers / Hardware] -->|HTTP / Telemetry Ingest| B[Express API Server web/src/server]
     B -->|Drizzle ORM| C[(PostgreSQL Database)]
     B -->|Firebase Auth| D[Firebase Admin]
     
     E[📱 Flutter Mobile App mobile/] -->|REST / Mock / Live| B
-    F[💻 Web Dashboard src/] -->|REST / Realtime| B
-    
-    F -->|GenAI SDK| G[Google Gemini AI Transit Engine]
     F[💻 Web Dashboard web/src/] -->|REST / Realtime| B
 ```
 
@@ -40,7 +36,6 @@ graph TD
 
 ```
 Ooyalo/
-├── mobile/                        # 📱 Flutter Mobile Application
 ├── web/                           # 💻 Web Dashboard, Express Backend API & DB
 │   ├── src/                       # React 19 UI, Express server, Drizzle DB, services
 │   │   ├── components/            # React UI components (LiveMap, DispatchOps, etc.)
@@ -61,19 +56,6 @@ Ooyalo/
 │   ├── android/                   # Android native platform files
 │   └── pubspec.yaml               # Flutter package configuration & dependencies
 │
-├── src/                           # 💻 Web Dashboard & Fleet Console
-│   ├── components/                # React components (Map, RoutePlanner, ShuttleList, etc.)
-│   ├── db/                        # Database schema & Drizzle ORM setup
-│   ├── lib/                       # Firebase & shared utilities
-│   ├── server/                    # Express API server & telemetry ingestion endpoints
-│   ├── services/                  # Gemini AI and client-side data services
-│   ├── App.tsx                    # Main Web Dashboard UI
-│   └── main.tsx                   # React entry point
-│
-├── .env.example                   # Environment configuration template
-├── package.json                   # Web & server dependencies (React, Vite, Express, Drizzle)
-├── tsconfig.json                  # TypeScript configuration
-└── vite.config.ts                 # Vite build configuration
 ├── package.json                   # 🚀 Root orchestration scripts (dev, build, lint)
 ├── .gitignore                     # Monorepo gitignore rules
 └── README.md                      # Documentation
@@ -85,28 +67,17 @@ Ooyalo/
 
 ### 1. Web Dashboard & Server Setup
 
-**Prerequisites:** Node.js (v18+) or Bun
 **Prerequisites:** Node.js (v18+)
 
-1. Install dependencies:
 1. Install web dependencies:
    ```bash
-   npm install
    cd web && npm install && cd ..
    ```
 
-2. Configure environment variables:
 2. Start development server & API (Runs both Express API on `:3001` and Vite on `:3000`):
-   ```bash
-   cp .env.example .env
-   ```
-   Set `GEMINI_API_KEY`, database credentials, and `APP_URL` as needed.
-
-3. Start development server & API:
    ```bash
    npm run dev
    ```
-   The dashboard runs at `http://localhost:3000`.
    * Or run individually:
      * `npm run dev:server` (Express API on `http://localhost:3001`)
      * `npm run dev:web` (Vite UI on `http://localhost:3000`)
